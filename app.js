@@ -138,7 +138,8 @@ async function automateProject(repo) {
 
         // 2. Create Ruleset (Updated with Bypass Actors)
         await rulset(repo);
-        // await createMilestone(repo);
+        
+        await createMilestone(repo);
         
         // 3. Create Milestones and their specific Issues
     } catch (error) {
