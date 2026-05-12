@@ -132,6 +132,18 @@ const inviteCollaborator = async (repo) => {
     console.log(`✉️ Invitation sent`);
 };
 
+const createNamingIssue = async (repo) => {
+    await octokit.request("POST /repos/{owner}/{repo}/issues", {
+        owner: REPO_OWNER,
+        repo: repo,
+        title: "docs: nombrar el proyecto",
+        body: "Definir un nombre oficial para el proyecto y actualizar la documentación inicial.",
+        labels: ["documentation"],
+    });
+
+    console.log(`📌 Issue 'nombrar el proyecto' creada.`);
+};
+
 const createMilestone = async (repo) => {
     for (const item of milestones) {
         // Create the Milestone
@@ -176,6 +188,8 @@ async function automateProject(repo) {
 
         // 2. Create Milsitone signed contract
         await createFirmaMilestone(repo);
+
+        await createNamingIssue(repo)
 
         // 3. Create Milestones and their specific Issues
         await createMilestone(repo);
