@@ -7,40 +7,47 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 const REPO_OWNER = process.env.GITHUB_USER;
 
 // 1. CONFIGURATION: Repositories and Milestone Mapping
-const REPOSITORIES = [""];
+const REPOSITORIES = ["DOM"];
 
 const milestones = [
-    {
-        title: "Firmar contrato.",
-        tasks: [
-            {
-                title: "Parte 1 - Solicitudes de consulta (GET)",
-                content: "• Solicitud 1: Realice una solicitud GET para obtener la lista completa de usuarios disponibles en el servicio.\n• Solicitud 2: Realice una solicitud GET para consultar la información de un usuario específico, utilizando su identificador.\n• Solicitud 3: Realice una solicitud GET para obtener todas las publicaciones (posts) asociadas a un usuario determinado.",
-            },
-            {
-                title: "Parte 2 - Creación de información (POST)",
-                content: "• Solicitud 4: Realice una solicitud POST para crear una nueva publicación asociada a un usuario existente. Incluya información como título y contenido.\n• Solicitud 5: Realice una solicitud POST para registrar un nuevo comentario relacionado con una publicación.",
-            },
-        ],
-    },
     {
         title: "Actividades de transferencia del conocimiento.",
         tasks: [
             {
-                title: "Enunciado 1 (Usuarios activos y sus publicaciones)",
-                content: "**Requerimientos:**\n• Consultar la lista completa de usuarios.\n• Consultar la lista de publicaciones.\n• Identificar cuáles usuarios tienen publicaciones asociadas.\n• Calcular la cantidad de publicaciones por usuario.\n• Mostrar también los usuarios que no tienen publicaciones.\n**Datos de entrada:** Endpoint de usuarios (users), Endpoint de publicaciones (posts), Identificador del usuario (userId).",
+                title: "Componente de Búsqueda de Usuario",
+                content:
+                    "**Requerimientos:**\n• **UI:** Crear el contenedor superior con un input para el ID y un botón de búsqueda.\n• **JS:** Capturar el evento del formulario, realizar la petición a `/users` y gestionar el estado de carga.\n**Datos de entrada:** Input de texto, Botón de acción, API Fetch.",
             },
             {
-                title: "Enunciado 2 (Publicaciones con y sin comentarios)",
-                content: "**Requerimientos:**\n• Consultar todas las publicaciones.\n• Consultar todos los comentarios.\n• Relacionar comentarios con sus publicaciones.\n• Identificar publicaciones sin comentarios.\n• Clasificar publicaciones según tengan o no comentarios.\n**Datos de entrada:** Endpoint de publicaciones (posts), Endpoint de comentarios (comments), Identificador de la publicación (postId).",
+                title: "Componente de Feedback y Perfil",
+                content:
+                    "**Requerimientos:**\n• **UI:** Diseñar el área central para mostrar los datos del usuario (Nombre, Email, etc.) o un mensaje de 'Error: Usuario no encontrado'.\n• **JS:** Inyectar los datos del usuario en el DOM si la respuesta es exitosa; de lo contrario, mostrar el mensaje de error visualmente.\n**Datos de entrada:** Objeto de usuario de la API, Contenedor de alertas.",
             },
             {
-                title: "Enunciado 3 (Búsqueda específica de información)",
-                content: "**Requerimientos:**\n• Consultar todas las publicaciones.\n• Buscar una publicación específica por su identificador.\n• Consultar los comentarios relacionados con esa publicación.\n• Validar si existen o no comentarios asociados.\n**Datos de entrada:** ID de la publicación, Endpoint de publicaciones (posts), Endpoint de comentarios (comments).",
+                title: "Componente Formulario de Nueva Tarea (Parte faltante)",
+                content:
+                    "**Requerimientos:**\n• **UI:** Crear un formulario intermedio con campos para Título y Descripción que permanezca habilitado solo si hay un usuario activo.\n• **JS:** Validar que los campos no estén vacíos y prevenir el envío si no hay un ID de usuario vinculado.\n**Datos de entrada:** Inputs de formulario, Estado del usuario activo.",
             },
             {
-                title: "Enunciado 4 (Eliminación lógica y validación de datos)",
-                content: "**Requerimientos:**\n• Consultar las publicaciones.\n• Consultar los comentarios.\n• Verificar si una publicación específica tiene comentarios.\n• Si no tiene comentarios, ejecutar la eliminación.\n• Validar el resultado mediante una nueva consulta.\n**Datos de entrada:** ID de la publicación, Endpoint de publicaciones (posts), Endpoint de comentarios (comments).",
+                title: "Componente de Lista de Tareas (Tasks)",
+                content:
+                    "**Requerimientos:**\n• **UI:** Crear el contenedor inferior representado en image_8f46e0.png para el listado dinámico.\n• **JS:** Implementar la función de renderizado que tome cada tarea nueva y la agregue al final de la lista sin recargar la página.\n**Datos de entrada:** Array de tareas locales, Plantilla de fila/item de tarea.",
+            },
+
+            {
+                title: "Lógica de Búsqueda y Consumo de API (JS)",
+                content:
+                    "**Requerimientos:**\n• Implementar `fetch` para consultar `/users` en JSONPlaceholder.\n• Crear la función de búsqueda que compare el valor del input con los datos del servidor.\n• Desarrollar la lógica para alternar la visibilidad del formulario de tareas basado en el resultado de la búsqueda.\n• Manejar promesas y errores de red.\n**Datos de entrada:** Event Listener (submit), Endpoint `/users`, Funciones asíncronas.",
+            },
+            {
+                title: "Gestión de Eventos y Validación (JS)",
+                content:
+                    "**Requerimientos:**\n• Prevenir el comportamiento por defecto de los formularios con `preventDefault()`.\n• Validar que los campos de la tarea no estén vacíos antes de procesar.\n• Capturar los datos del formulario de tareas y asociarlos al ID del usuario actual en memoria.\n• Implementar lógica para limpiar los inputs después de cada inserción exitosa.\n**Datos de entrada:** FormData API, Objetos de JavaScript, Validaciones condicionales.",
+            },
+            {
+                title: "Inserción Dinámica en el DOM (JS/UI)",
+                content:
+                    "**Requerimientos:**\n• Crear una función que reciba el objeto de la tarea y genere nodos de Element (tr, td) usando `createElement`.\n• Inyectar las nuevas filas en el `tbody` de la tabla sin afectar los datos existentes.\n• Asegurar que la interfaz se actualice inmediatamente (Real-time) tras el registro.\n• Manejar la actualización visual del estado de la tarea (completada/pendiente).\n**Datos de entrada:** Métodos `appendChild` o `insertAdjacentHTML`, Selectores del DOM.",
             },
         ],
     },
@@ -94,17 +101,23 @@ const rulset = async (repo) => {
 // Nueva función para el Milestone de contratos
 const createFirmaMilestone = async (repo) => {
     // 1. Crear el Milestone específico
-    const { data: milestone } = await octokit.request("POST /repos/{owner}/{repo}/milestones", {
-        owner: REPO_OWNER,
-        repo: repo,
-        title: "Firma Contrato",
-        state: "open",
-    });
+    const { data: milestone } = await octokit.request(
+        "POST /repos/{owner}/{repo}/milestones",
+        {
+            owner: REPO_OWNER,
+            repo: repo,
+            title: "Firma Contrato",
+            state: "open",
+        },
+    );
 
     console.log(`📂 Milestone 'Firma Contrato' creado.`);
 
     // 2. Datos en crudo para las issues
-    const issuesContrato = ["[DOCS]: Firma de contrato - Jhon Sebastian Falcon Ruiz", "[DOCS]: Firma de contrato - Jhon Jairo Gelvez Gomez"];
+    const issuesContrato = [
+        "[DOCS]: Firma de contrato - Jhon Sebastian Falcon Ruiz",
+        "[DOCS]: Firma de contrato - Jhon Jairo Gelvez Gomez",
+    ];
 
     // 3. Crear las issues relacionadas
     for (const title of issuesContrato) {
@@ -122,12 +135,15 @@ const createFirmaMilestone = async (repo) => {
 };
 
 const inviteCollaborator = async (repo) => {
-    await octokit.request("PUT /repos/{owner}/{repo}/collaborators/{username}", {
-        owner: REPO_OWNER,
-        repo: repo,
-        username: "falconsebas23-prog",
-        permission: "push",
-    });
+    await octokit.request(
+        "PUT /repos/{owner}/{repo}/collaborators/{username}",
+        {
+            owner: REPO_OWNER,
+            repo: repo,
+            username: "falconsebas23-prog",
+            permission: "push",
+        },
+    );
 
     console.log(`✉️ Invitation sent`);
 };
@@ -147,12 +163,15 @@ const createNamingIssue = async (repo) => {
 const createMilestone = async (repo) => {
     for (const item of milestones) {
         // Create the Milestone
-        const { data: milestone } = await octokit.request("POST /repos/{owner}/{repo}/milestones", {
-            owner: REPO_OWNER,
-            repo: repo,
-            title: item.title,
-            state: "open",
-        });
+        const { data: milestone } = await octokit.request(
+            "POST /repos/{owner}/{repo}/milestones",
+            {
+                owner: REPO_OWNER,
+                repo: repo,
+                title: item.title,
+                state: "open",
+            },
+        );
 
         console.log(`📂 Milestone created: ${milestone.title}`);
 
@@ -168,12 +187,64 @@ const createMilestone = async (repo) => {
                 milestone: milestone.number,
                 labels: ["enhancement"],
                 headers: {
-                    'X-GitHub-Api-Version': '2022-11-28' // Versión obligatoria para evitar deprecation
-                }
+                    "X-GitHub-Api-Version": "2022-11-28", // Versión obligatoria para evitar deprecation
+                },
             });
 
             console.log(`   📌 Issue created: ${task.title}`);
         }
+    }
+};
+
+const addTransferenciaIssues = async (repo) => {
+    const { data: allMilestones } = await octokit.request(
+        "GET /repos/{owner}/{repo}/milestones",
+        {
+            owner: REPO_OWNER,
+            repo: repo,
+            state: "all", 
+        },
+    );
+
+    // 1. Find the milestone in GitHub (using the name as it appears there)
+    const targetMilestone = allMilestones.find(
+        (m) => m.title.trim() === "Actividades de transferencia del conocimiento",
+    );
+
+    if (!targetMilestone) {
+        console.error("❌ Milestone not found even in 'all' state.");
+        return;
+    }
+
+    console.log(`📂 Found Milestone: ${targetMilestone.title} (ID: ${targetMilestone.number})`);
+
+    // 2. Find the data in your local 'milestones' array. 
+    // Make sure this string matches your config exactly (with the dot)!
+    const transferenciaData = milestones.find(
+        (m) => m.title === "Actividades de transferencia del conocimiento.",
+    );
+
+    if (!transferenciaData) {
+        console.error("❌ Error: Could not find task data in the 'milestones' array. Check the title spelling!");
+        return;
+    }
+
+    for (const task of transferenciaData.tasks) {
+        const finalBody = templateBody.replace(placeholder, task.content);
+
+        await octokit.request("POST /repos/{owner}/{repo}/issues", {
+            owner: REPO_OWNER,
+            repo: repo,
+            title: `[FEAT]: ${task.title}`,
+            body: finalBody,
+            milestone: targetMilestone.number,
+            labels: ["enhancement"],
+            headers: {
+                "X-GitHub-Api-Version": "2022-11-28",
+            },
+        });
+
+        console.log(`   📌 Issue added: ${task.title}`);
     }
 };
 
@@ -182,19 +253,24 @@ async function automateProject(repo) {
         console.log(`\n🚀 Processing: ${repo}`);
 
         // 1. Create Ruleset (Updated with Bypass Actors)
-        await rulset(repo);
+        // await rulset(repo);
 
-        await inviteCollaborator(repo)
+        // await inviteCollaborator(repo);
 
         // 2. Create Milsitone signed contract
-        await createFirmaMilestone(repo);
+        // await createFirmaMilestone(repo);
 
-        await createNamingIssue(repo)
+        // await createNamingIssue(repo);
 
         // 3. Create Milestones and their specific Issues
-        await createMilestone(repo);
+        // await createMilestone(repo);
+
+        await addTransferenciaIssues(repo);
     } catch (error) {
-        console.error(`❌ Error in ${repo}:`, error.response?.data?.message || error.message);
+        console.error(
+            `❌ Error in ${repo}:`,
+            error.response?.data?.message || error.message,
+        );
     }
 }
 
