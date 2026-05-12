@@ -155,6 +155,9 @@ const createMilestone = async (repo) => {
                 body: finalBody,
                 milestone: milestone.number,
                 labels: ["enhancement"],
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28' // Versión obligatoria para evitar deprecation
+                }
             });
 
             console.log(`   📌 Issue created: ${task.title}`);
