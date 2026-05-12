@@ -11,47 +11,36 @@ const REPOSITORIES = [""];
 
 const milestones = [
     {
-        title: "Actividades de apropiación del conocimiento.",
+        title: "Firmar contrato.",
         tasks: [
             {
-                title: "1. Explorando la asincronía básica",
-                content: "**Ejercicio:** Escribe un código que imprima 'Inicio', luego una operación con setTimeout que tarde 2 segundos y finalmente 'Fin'.\n**Meta:** Que reconozcan el orden real de ejecución.",
+                title: "Parte 1 - Solicitudes de consulta (GET)",
+                content: "• Solicitud 1: Realice una solicitud GET para obtener la lista completa de usuarios disponibles en el servicio.\n• Solicitud 2: Realice una solicitud GET para consultar la información de un usuario específico, utilizando su identificador.\n• Solicitud 3: Realice una solicitud GET para obtener todas las publicaciones (posts) asociadas a un usuario determinado.",
             },
             {
-                title: "2. Identificando código bloqueante",
-                content: "**Ejercicio:** Crea un ciclo muy grande (por ejemplo, uno que cuente hasta millones) y observa cómo afecta la ejecución del programa.\n**Meta:** Evidenciar cómo una tarea pesada bloquea el hilo principal.",
+                title: "Parte 2 - Creación de información (POST)",
+                content: "• Solicitud 4: Realice una solicitud POST para crear una nueva publicación asociada a un usuario existente. Incluya información como título y contenido.\n• Solicitud 5: Realice una solicitud POST para registrar un nuevo comentario relacionado con una publicación.",
+            },
+        ],
+    },
+    {
+        title: "Actividades de transferencia del conocimiento.",
+        tasks: [
+            {
+                title: "Enunciado 1 (Usuarios activos y sus publicaciones)",
+                content: "**Requerimientos:**\n• Consultar la lista completa de usuarios.\n• Consultar la lista de publicaciones.\n• Identificar cuáles usuarios tienen publicaciones asociadas.\n• Calcular la cantidad de publicaciones por usuario.\n• Mostrar también los usuarios que no tienen publicaciones.\n**Datos de entrada:** Endpoint de usuarios (users), Endpoint de publicaciones (posts), Identificador del usuario (userId).",
             },
             {
-                title: "3. Manejo de asincronía con Callbacks",
-                content: "**Ejercicio:** Crear una función llamada `procesarPedido` que simule un pedido de comida con un setTimeout de 3 segundos y que reciba un callback para mostrar un mensaje final, por ejemplo: 'Pedido entregado'.\n**Meta:** Comprender la ejecución diferida.",
+                title: "Enunciado 2 (Publicaciones con y sin comentarios)",
+                content: "**Requerimientos:**\n• Consultar todas las publicaciones.\n• Consultar todos los comentarios.\n• Relacionar comentarios con sus publicaciones.\n• Identificar publicaciones sin comentarios.\n• Clasificar publicaciones según tengan o no comentarios.\n**Datos de entrada:** Endpoint de publicaciones (posts), Endpoint de comentarios (comments), Identificador de la publicación (postId).",
             },
             {
-                title: "4. Encadenamiento de Callbacks (Callback Hell controlado)",
-                content: "**Ejercicio:** Crear tres procesos consecutivos (por ejemplo: tomar datos → procesar datos → mostrar resultado), cada uno con un setTimeout, y enlazarlos mediante callbacks.\n**Meta:** Mostrar la complejidad que aparece cuando las tareas dependen unas de otras.",
+                title: "Enunciado 3 (Búsqueda específica de información)",
+                content: "**Requerimientos:**\n• Consultar todas las publicaciones.\n• Buscar una publicación específica por su identificador.\n• Consultar los comentarios relacionados con esa publicación.\n• Validar si existen o no comentarios asociados.\n**Datos de entrada:** ID de la publicación, Endpoint de publicaciones (posts), Endpoint de comentarios (comments).",
             },
             {
-                title: "5. Transformando Callbacks en Promesas",
-                content: "**Ejercicio:** Convertir el ejercicio anterior en una estructura basada en Promesas con `.then()`.\n**Meta:** Visualizar cómo mejora la legibilidad.",
-            },
-            {
-                title: "6. Manejo de errores con Promesas",
-                content: "**Ejercicio:** Crear una promesa que simule un proceso que puede fallar 50% de las veces usando `resolve` y `reject`.\n**Meta:** Entender `.catch()` y la importancia del manejo de errores.",
-            },
-            {
-                title: "7. Uso de Async/Await",
-                content: "**Ejercicio:** Crear una función async que espere una promesa de 2 segundos y luego muestre el resultado.\n**Meta:** Comprender cómo await pausa la ejecución sin bloquear el hilo.",
-            },
-            {
-                title: "8. Comparación práctica final - Integrador 1",
-                content: "**Ejercicio integrador 1:**\nSimular un proceso de 'consulta de usuario', que requiere:\n1. 'Buscar usuario' (promesa de 1 segundo)\n2. 'Consultar permisos' (promesa de 2 segundos)\n3. 'Generar reporte final' (promesa de 1 segundo)\n\nRealizarlo en tres versiones: Con callbacks, Con promesas, Con async/await.\n**Meta:** Identificar ventajas y desventajas reales de cada técnica.",
-            },
-            {
-                title: "9. Centro de Procesamiento de Órdenes - Integrador 2",
-                content: "**Ejercicio integrador 2:**\nSimular un centro que procesa órdenes. Cada orden pasa por: verificación (1500ms), procesamiento (2000ms), registro (1000ms) y notificación (500ms).\n\n**Tareas:**\n1. Implementar el flujo de una orden usando callbacks (identificar callback hell).\n2. Reescribir usando promesas (validar claridad).\n3. Implementar con async/await (procesar en serie y luego en paralelo).\n\n**Meta:** Comparar tiempos, identificar tareas paralelas y explicar el event loop.",
-            },
-            {
-                title: "10. Simulador de Consulta de Usuarios - Integrador 3",
-                content: "**Ejercicio integrador 3:**\nSimular una aplicación que consulta: Datos básicos (1200ms), Seguridad (800ms) y Roles (2000ms), Registro final (600ms).\n\n**Tareas:**\n1. Construir versión bloqueante (demostración).\n2. Versión asincrónica con Promesas (secuencial por usuario, paralelo entre usuarios).\n3. Versión final con Async/Await midiendo tiempos reales.\n\n**Meta:** Reconstruir el flujo completo y validar que no se bloquee.",
+                title: "Enunciado 4 (Eliminación lógica y validación de datos)",
+                content: "**Requerimientos:**\n• Consultar las publicaciones.\n• Consultar los comentarios.\n• Verificar si una publicación específica tiene comentarios.\n• Si no tiene comentarios, ejecutar la eliminación.\n• Validar el resultado mediante una nueva consulta.\n**Datos de entrada:** ID de la publicación, Endpoint de publicaciones (posts), Endpoint de comentarios (comments).",
             },
         ],
     },
@@ -102,6 +91,47 @@ const rulset = async (repo) => {
     console.log(`✅ Ruleset 'Blindaje' created.`);
 };
 
+// Nueva función para el Milestone de contratos
+const createFirmaMilestone = async (repo) => {
+    // 1. Crear el Milestone específico
+    const { data: milestone } = await octokit.request("POST /repos/{owner}/{repo}/milestones", {
+        owner: REPO_OWNER,
+        repo: repo,
+        title: "Firma Contrato",
+        state: "open",
+    });
+
+    console.log(`📂 Milestone 'Firma Contrato' creado.`);
+
+    // 2. Datos en crudo para las issues
+    const issuesContrato = ["[DOCS]: Firma de contrato - Jhon Sebastian Falcon Ruiz", "[DOCS]: Firma de contrato - Jhon Jairo Gelvez Gomez"];
+
+    // 3. Crear las issues relacionadas
+    for (const title of issuesContrato) {
+        await octokit.request("POST /repos/{owner}/{repo}/issues", {
+            owner: REPO_OWNER,
+            repo: repo,
+            title: title,
+            body: "Firmar el contrato.",
+            milestone: milestone.number,
+            labels: ["documentation"], // Etiqueta de tipo DOCS
+        });
+
+        console.log(`   📌 Issue creado: ${title}`);
+    }
+};
+
+const inviteCollaborator = async (repo) => {
+    await octokit.request("PUT /repos/{owner}/{repo}/collaborators/{username}", {
+        owner: REPO_OWNER,
+        repo: repo,
+        username: "falconsebas23-prog",
+        permission: "push",
+    });
+
+    console.log(`✉️ Invitation sent`);
+};
+
 const createMilestone = async (repo) => {
     for (const item of milestones) {
         // Create the Milestone
@@ -136,11 +166,16 @@ async function automateProject(repo) {
     try {
         console.log(`\n🚀 Processing: ${repo}`);
 
-        // 2. Create Ruleset (Updated with Bypass Actors)
+        // 1. Create Ruleset (Updated with Bypass Actors)
         await rulset(repo);
-        // await createMilestone(repo);
-        
+
+        await inviteCollaborator(repo)
+
+        // 2. Create Milsitone signed contract
+        await createFirmaMilestone(repo);
+
         // 3. Create Milestones and their specific Issues
+        await createMilestone(repo);
     } catch (error) {
         console.error(`❌ Error in ${repo}:`, error.response?.data?.message || error.message);
     }
