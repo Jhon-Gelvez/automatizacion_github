@@ -4,7 +4,7 @@ require("dotenv").config();
 const { ruleset, createFirmaMilestone, inviteCollaborator, createNamingIssue, createMilestone, addIssue, addIssueText, createMilestoneText } = require("./src");
 
 // 1. CONFIGURATION: Repositories
-const REPOSITORIES = ["prueba_automatizacion"];
+const REPOSITORIES = ["DOM"];
 
 /**
  * Orquesta las operaciones de automatización para un repositorio
@@ -18,7 +18,7 @@ async function automateProject(repo) {
         // await ruleset(repo);
         // await inviteCollaborator(repo);
         // await createFirmaMilestone(repo);
-        // await createNamingIssue(repo);
+        await addIssue(repo, "Actividades de transferencia del conocimiento",addIssueText);
         // await addTransferenciaIssues(repo);
         // await createMilestone(repo, createMilestoneText);
     } catch (error) {
